@@ -12,6 +12,13 @@ const btnOutline =
 // Datos Oficiales del CAP - Sede Huancayo
 const GOOGLE_FORMS_CAP_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScRXyfCnI0dvraZgFj2kwmhGd9rSV3F9pKy_jXCuL1jgGwZVw/viewform' 
 const CAP_EMAIL_HUANCAYO = 'mailto:centrodeatencionpsicologica@continental.edu.pe'
+const WEB_URL = 'https://conoce-tu-cap.vercel.app/'
+// Pega aquí el número OFICIAL de urgencias/WhatsApp del CAP (solo dígitos con código de país, ej. '51987654321').
+// Si lo dejas vacío, el botón de llamada no se muestra.
+const CAP_TELEFONO_URGENCIA = '970727579'
+const CAP_HORARIO = 'Lunes a viernes: 9:00 a.m. a 1:00 p.m. y 3:00 p.m. a 7:00 p.m.'
+const MAPS_URL = 'https://www.google.com/maps/search/?api=1&query=Av.+San+Carlos+1980+Huancayo'
+const CAP_FOTO = '/cap-entrada.png' // sube tu foto a la carpeta public/ con este nombre
 const CAP_PORTAL_OFICIAL = 'https://estudiantes.ucontinental.edu.pe/oficinas/bienestar-universitario/centro-de-atencion-psicologica/'
 
 // Equipo Real de Psicólogos de la Sede Huancayo (C.Ps.P.)
@@ -70,31 +77,24 @@ const spotifyResources = {
 const pdfResources = [
   {
     title: 'En Tiempos de Estrés (OPS / OMS)',
-    desc: 'Guía ilustrada oficial con ejercicios de atención plena y manejo de la ansiedad.',
+    desc: 'Guía con ejercicios sencillos para manejar el estrés y la ansiedad.',
     url: 'https://www.who.int/es/publications/i/item/9789240003927',
     badge: 'Guía Oficial OMS',
-    type: 'PDF · Ilustrado'
-  },
-  {
-    title: 'Salud Mental y Bienestar (UNICEF)',
-    desc: 'Herramientas de autocuidado y gestión emocional diseñadas para jóvenes.',
-    url: 'https://www.unicef.org/lac/informes/salud-mental-adolescentes-y-jovenes',
-    badge: 'Informe UNICEF',
-    type: 'PDF · Lectura'
+    type: 'Guía ilustrada'
   },
   {
     title: 'Primeros Auxilios Psicológicos (OPS)',
-    desc: 'Guía de orientación para apoyar a compañeros o familiares en momentos de crisis.',
+    desc: 'Cómo apoyar a un compañero o familiar que está pasando un mal momento.',
     url: 'https://iris.paho.org/handle/10665.2/31081',
     badge: 'Manual OPS',
-    type: 'PDF · Práctico'
+    type: 'Lectura práctica'
   },
   {
-    title: 'Cuaderno de Autoestima (MINSA)',
-    desc: 'Ejercicios prácticos y reflexiones para fortalecer la confianza y límites personales.',
-    url: 'https://www.gob.pe/institucion/minsa/informes-publicaciones/tipo/2-manuales-guias',
-    badge: 'Manual MINSA',
-    type: 'PDF · Ejercicios'
+    title: 'Salud Mental y Bienestar (UNICEF)',
+    desc: 'Consejos de autocuidado emocional pensados para jóvenes.',
+    url: 'https://www.unicef.org/lac/informes/salud-mental-adolescentes-y-jovenes',
+    badge: 'Informe UNICEF',
+    type: 'Lectura'
   }
 ]
 
@@ -202,6 +202,10 @@ function Semaforo() {
 const faqs = [
   ['¿Aparece algún cobro en mi boleta de pago o pensión?', 'No. El servicio del Centro de Atención Psicológica (CAP) es 100% gratuito para todos los estudiantes matriculados en la Universidad Continental.'],
   ['¿Mis profesores, coordinadores o padres se enterarán?', 'No. Se aplica el principio de estricto secreto profesional. Las atenciones son totalmente confidenciales y no quedan registradas en tu historial académico.'],
+  ['¿Cuál es el horario de atención?', 'Lunes a viernes, de 9:00 a.m. a 1:00 p.m. y de 3:00 p.m. a 7:00 p.m. Puedes enviar tu solicitud a cualquier hora y el CAP la atenderá en su horario.'],
+  ['¿Cómo es la primera cita?', 'Es una conversación tranquila con un psicólogo del CAP donde cuentas cómo te sientes. No necesitas preparar nada ni llevar documentos especiales. Puedes elegir atención presencial o virtual.'],
+  ['¿Qué pasa si necesito algo más que orientación?', 'Si el psicólogo considera que necesitas atención especializada, te deriva al Policlínico y te explica cómo continuar. Todo se coordina contigo desde el CAP.'],
+  ['¿Qué hago si tengo una urgencia emocional?', 'Si sientes que no puedes esperar a una cita, mira la sección de Urgencias más abajo. Ahí encuentras a quién llamar ahora mismo.'],
   ['¿Quiénes atienden en el CAP y qué modalidad ofrecen?', 'El equipo está conformado por psicólogos profesionales colegiados de la universidad. La atención se ofrece en modalidad presencial en el campus Huancayo y virtual por Google Meet.'],
 ]
 
@@ -229,6 +233,7 @@ function Faq() {
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [spotifyTab, setSpotifyTab] = useState<'playlists' | 'podcasts'>('playlists')
+  const [fotoOk, setFotoOk] = useState(true)
 
   return (
     <div className="min-h-screen bg-[#F9F6FC] text-slate-800 font-sans antialiased">
@@ -321,6 +326,41 @@ export default function App() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* GARANTÍA */}
+        <section className="flex flex-col items-center gap-4 rounded-2xl border-2 border-dashed border-purple-400 bg-white p-5 text-center sm:flex-row sm:text-left">
+          <div className="grid size-12 shrink-0 place-items-center rounded-xl bg-purple-700 text-white">
+            <Icon d={ic.shield} className="size-6" />
+          </div>
+          <p className="text-base font-semibold text-purple-950">
+            Tu atención es <span className="text-purple-700">gratuita</span>, <span className="text-purple-700">confidencial</span> y no aparece ningún cobro en tu boleta de pago.
+          </p>
+        </section>
+
+        {/* PROCESO DE CITA */}
+        <section id="proceso" className="scroll-mt-20 space-y-5">
+          <div className="text-center space-y-1">
+            <h2 className="font-display text-2xl font-bold text-purple-950">¿Qué pasa después de pedir tu cita?</h2>
+            <p className="text-sm text-slate-600">Así de simple es el camino, paso a paso.</p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-4">
+            {[
+              ['1', 'Llenas el formulario', 'Es corto y lo envías desde tu celular o computadora.'],
+              ['2', 'El CAP te contacta', 'Revisan tu solicitud y se comunican contigo para coordinar día y hora.'],
+              ['3', 'Tu primera orientación', 'Conversas con un psicólogo del CAP, en persona o virtual.'],
+              ['4', 'Si hace falta, derivación', 'Si necesitas atención especializada, te derivan al Policlínico y te explican cómo seguir.']
+            ].map(([n, t, d]) => (
+              <div key={n} className={`${card} p-5`}>
+                <span className="grid size-9 place-items-center rounded-full bg-purple-700 font-display text-sm font-bold text-white">{n}</span>
+                <h3 className="mt-3 font-bold text-purple-950">{t}</h3>
+                <p className="mt-1 text-sm text-slate-600">{d}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-xs text-slate-500">
+            ¿Tienes dudas antes de empezar? Escríbenos a <a href={CAP_EMAIL_HUANCAYO} className="font-semibold text-purple-700 underline">centrodeatencionpsicologica@continental.edu.pe</a>
+          </p>
         </section>
 
         {/* EJES OFICIALES DEL CAP */}
@@ -457,12 +497,12 @@ export default function App() {
                 <Icon d={ic.doc} className="size-5" />
               </div>
               <div>
-                <h3 className="font-display font-bold text-lg text-purple-950">Biblioteca de Autocuidado y Libros Gratuitos</h3>
-                <p className="text-xs text-slate-600">Manuales, revistas y guías oficiales en PDF para descargar de forma libre</p>
+                <h3 className="font-display font-bold text-lg text-purple-950">Guías de Autocuidado</h3>
+                <p className="text-xs text-slate-600">Lecturas cortas y gratuitas para cuidarte</p>
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-3">
               {pdfResources.map((doc) => (
                 <div key={doc.title} className={`${card} bg-purple-50/50 border-purple-200/80 p-5 flex flex-col justify-between hover:border-purple-400 transition`}>
                   <div className="space-y-2">
@@ -482,12 +522,32 @@ export default function App() {
                     rel="noopener noreferrer"
                     className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-purple-700 px-4 py-2 text-xs font-bold text-white transition hover:bg-purple-800 active:scale-95"
                   >
-                    Descargar / Leer PDF <Icon d={ic.external} className="size-3.5" />
+                    Leer guía <Icon d={ic.external} className="size-3.5" />
                   </a>
                 </div>
               ))}
             </div>
           </div>
+        </section>
+
+        {/* URGENCIAS */}
+        <section id="urgencias" className="scroll-mt-20 rounded-2xl border-2 border-rose-200 bg-rose-50 p-6 space-y-4">
+          <h2 className="font-display text-2xl font-bold text-rose-900">¿Necesitas ayuda ahora mismo?</h2>
+          <p className="text-sm text-rose-900/80">Si sientes que no puedes esperar a una cita, no estás solo/a. Puedes comunicarte hoy:</p>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            {CAP_TELEFONO_URGENCIA && (
+              <a href={`https://wa.me/${CAP_TELEFONO_URGENCIA}`} target="_blank" rel="noopener noreferrer" className={`${btnPrimary} text-sm`}>
+                Escribir al CAP por WhatsApp
+              </a>
+            )}
+            <a href="tel:113" className={`${btnPrimary} text-sm`}>
+              Llamar a la Línea 113 (opción 5 · salud mental)
+            </a>
+            <a href={CAP_EMAIL_HUANCAYO} className={`${btnOutline} text-sm`}>
+              Escribir al correo del CAP
+            </a>
+          </div>
+          <p className="text-xs text-rose-900/70">La Línea 113 del MINSA es gratuita y atiende todos los días. El CAP atiende en horario de oficina.</p>
         </section>
 
         {/* PREGUNTAS FRECUENTES */}
@@ -520,6 +580,14 @@ export default function App() {
         </div>
 
         <div className="flex items-start gap-3 rounded-xl bg-purple-900/80 p-3.5 border border-purple-700">
+          <Icon d={ic.doc} className="size-5 shrink-0 text-amber-400 mt-0.5" />
+          <div>
+            <strong className="block text-white font-bold">Horario de atención:</strong>
+            {CAP_HORARIO}
+          </div>
+        </div>
+
+        <div className="flex items-start gap-3 rounded-xl bg-purple-900/80 p-3.5 border border-purple-700">
           <Icon d={ic.mail} className="size-5 shrink-0 text-amber-400 mt-0.5" />
           <div>
             <strong className="block text-white font-bold">Correo institucional directo:</strong>
@@ -531,6 +599,9 @@ export default function App() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 pt-2">
+        <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-xl border-2 border-purple-400 px-5 py-3 text-xs font-bold text-white transition hover:bg-white hover:text-purple-950 active:scale-95">
+          <Icon d={ic.map} className="mr-2 size-4" /> Cómo llegar
+        </a>
         <a href={CAP_EMAIL_HUANCAYO} className="inline-flex items-center justify-center rounded-xl border-2 border-purple-400 px-5 py-3 text-xs font-bold text-white transition hover:bg-white hover:text-purple-950 active:scale-95">
           <Icon d={ic.mail} className="mr-2 size-4" /> Enviar Correo Directo
         </a>
@@ -543,22 +614,43 @@ export default function App() {
     {/* Imagen y referencia visual de ubicación */}
     <div className="lg:col-span-5">
       <div className="relative rounded-2xl overflow-hidden border-2 border-purple-700 shadow-xl group">
-        <img
-          src="https://images.unsplash.com/photo-1562774053-701939374585?w=800&auto=format&fit=crop&q=80"
-          alt="Oficinas del CAP Sede Huancayo - Campus San Carlos"
-          className="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-105"
-        />
+        {fotoOk ? (
+          <img
+            src={CAP_FOTO}
+            alt="Entrada de las oficinas del CAP, Sede Huancayo"
+            onError={() => setFotoOk(false)}
+            className="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-105"
+          />
+        ) : (
+          <div className="aspect-[4/3] w-full bg-gradient-to-br from-purple-800 to-purple-950 grid place-items-center">
+            <Icon d={ic.map} className="size-16 text-purple-300" />
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/30 to-transparent" />
         <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-purple-950/90 backdrop-blur-md border border-purple-700 text-xs">
           <p className="font-bold text-amber-300 flex items-center gap-1.5">
             <Icon d={ic.map} className="size-4" /> Campus San Carlos — Huancayo
           </p>
-          <p className="text-purple-100 mt-0.5 text-[11px]">Atención presencial y virtual previa cita en el Portal del Estudiante[cite: 5].</p>
+          <p className="text-purple-100 mt-0.5 text-[11px]">La oficina está en el Pabellón de Bienestar Universitario. Atención presencial y virtual previa cita.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
+      {/* QR */}
+      <section id="qr" className="rounded-2xl bg-white border border-purple-100 p-6 sm:p-8 shadow-[0_4px_24px_rgba(92,45,145,0.08)]">
+        <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left">
+          <img src="/qr-conoce-tu-cap.png" alt="Código QR de Conoce tu CAP" className="size-40 shrink-0 rounded-xl border border-purple-100" />
+          <div className="space-y-3">
+            <h2 className="font-display text-xl font-bold text-purple-950">Escanea y comparte Conoce tu CAP</h2>
+            <p className="text-sm text-slate-600">Apunta con la cámara de tu celular para entrar a esta página. Compártelo con tus compañeros.</p>
+            <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
+              <a href="/qr-conoce-tu-cap.png" download="QR-Conoce-tu-CAP.png" className={`${btnPrimary} text-xs py-2.5 px-4`}>Descargar QR (PNG)</a>
+              <a href="/qr-conoce-tu-cap.svg" download="QR-Conoce-tu-CAP.svg" className={`${btnOutline} text-xs py-2 px-4`}>Descargar QR (SVG)</a>
+            </div>
+          </div>
+        </div>
+      </section>
       </main>
 
       {/* FOOTER */}
