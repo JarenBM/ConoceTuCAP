@@ -1,0 +1,10 @@
+{
+  "description": "This platform offers university students a confidential and free space for emotional health support, allowing easy appointment scheduling and access to resources.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
